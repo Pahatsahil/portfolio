@@ -24,7 +24,7 @@ const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
         </FadeIn>
 
         <div className="space-y-20">
-          {projects.map((project, index) => (
+          {projects.filter(p => p.visible !== false).map((project, index) => (
             <FadeIn key={project.id} delay={index * 0.1}>
               <div
                 className={`flex flex-col lg:flex-row gap-12 items-center ${
@@ -40,16 +40,20 @@ const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
                     transition={{ duration: 0.5 }}
                     viewport={{ once: true }}
                   >
-                    <div className="phone-frame aspect-[9/19] bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
-                      <div className="text-center p-6">
-                        <Smartphone
-                          size={48}
-                          className="text-[#61dafb] mx-auto mb-4"
-                        />
-                        <span className="text-gray-400 text-sm">
-                          {project.title}
-                        </span>
-                      </div>
+                    <div className="phone-frame aspect-[9/19] bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center overflow-hidden">
+                      {project.imageUrl ? (
+                        <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="text-center p-6">
+                          <Smartphone
+                            size={48}
+                            className="text-[#61dafb] mx-auto mb-4"
+                          />
+                          <span className="text-gray-400 text-sm">
+                            {project.title}
+                          </span>
+                        </div>
+                      )}
                     </div>
                     {/* Floating glow */}
                     <motion.div
@@ -109,16 +113,28 @@ const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
                           View Code
                         </motion.a>
                       )}
-                      {project.liveUrl && (
+                      {project.playStoreUrl && (
                         <motion.a
-                          href={project.liveUrl}
+                          href={project.playStoreUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 text-[#818cf8] font-medium hover:gap-3 transition-all"
                           whileHover={{ x: 5 }}
                         >
                           <ExternalLink size={18} />
-                          Live Demo
+                          Play Store
+                        </motion.a>
+                      )}
+                      {project.appStoreUrl && (
+                        <motion.a
+                          href={project.appStoreUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-white font-medium hover:gap-3 transition-all"
+                          whileHover={{ x: 5 }}
+                        >
+                          <ExternalLink size={18} />
+                          App Store
                         </motion.a>
                       )}
                     </div>

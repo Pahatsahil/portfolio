@@ -8,6 +8,7 @@ import {
   getDoc,
   setDoc,
   addDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import { firebaseConfig, COLLECTIONS } from "../lib/firebase";
 
@@ -54,7 +55,10 @@ export interface Profile {
   subtitle: string;
   bio: string;
   resumeUrl: string;
-  avatar?: string;
+  photoUrl?: string;
+  showPhoto?: boolean;
+  aboutStats?: { number: string; label: string }[];
+  aboutHighlights?: string[];
 }
 
 export interface Experience {
@@ -63,6 +67,7 @@ export interface Experience {
   company: string;
   period: string;
   highlights: string[];
+  order?: number;
 }
 
 export interface Project {
@@ -74,8 +79,11 @@ export interface Project {
   platform: string;
   color: string;
   githubUrl?: string;
-  liveUrl?: string;
+  playStoreUrl?: string;
+  appStoreUrl?: string;
   imageUrl?: string;
+  visible?: boolean;
+  order?: number;
 }
 
 export interface Skill {
@@ -112,11 +120,11 @@ export const useProfile = () => {
         if (!firestore) {
           // Use default profile if Firebase is not configured
           setProfile({
-            name: "Sahil Pahat",
-            title: "React Native Developer",
-            subtitle: "Cross-Platform Mobile App Specialist",
-            bio: "With 4 years of experience in cross-platform mobile development, I specialize in building high-performance mobile applications for Android and iOS using React Native, TypeScript, and native modules.",
-            resumeUrl: "/Sahil_Pahat_Resume.pdf",
+            name: "",
+            title: "",
+            subtitle: "",
+            bio: "",
+            resumeUrl: "",
           });
           setLoading(false);
           return;
@@ -154,42 +162,7 @@ export const useExperience = () => {
         const firestore = getDb();
         if (!firestore) {
           // Default experience data
-          setExperiences([
-            {
-              id: "1",
-              title: "Solution Developer (React Native)",
-              company: "iTechMission Private Limited",
-              period: "Mar 2025 – Present",
-              highlights: [
-                "Engineered native Android (Kotlin) and iOS (Swift) microphone listener services for real-time, low-latency audio analysis",
-                "Architected an offline-first mobile application optimized for low-end hardware using SQLite",
-                "Developed a high-performance social media app using TypeScript, reducing production runtime errors by 50%",
-                "Optimized performance of a charting module using custom eCharts for online and offline mode",
-              ],
-            },
-            {
-              id: "2",
-              title: "React Native Developer",
-              company: "Cyber Vision Infotech Pvt. Ltd",
-              period: "Apr 2023 – Mar 2025",
-              highlights: [
-                "Increased subscription purchases by 30% through effective call-to-action notifications and App linking",
-                "Created a custom native audio player in Kotlin and Swift using sophisticated React Native bridging",
-                "Developed seamless animations for a high-traffic Fitness App using the Reanimated Library",
-                "Integrated REST APIs using Axios and optimized React Hooks to improve rendering performance",
-              ],
-            },
-            {
-              id: "3",
-              title: "React Native Developer",
-              company: "Syscorp Inc.",
-              period: "Nov 2022 – Feb 2023",
-              highlights: [
-                "Enhanced warehouse management by boosting app performance by 20% with live QR scanning",
-                "Developed various high-utility applications including a cashback app similar to CashKaro",
-              ],
-            },
-          ]);
+          setExperiences([]);
           setLoading(false);
           return;
         }
@@ -201,6 +174,7 @@ export const useExperience = () => {
           id: doc.id,
           ...doc.data(),
         })) as Experience[];
+        data.sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
         setExperiences(data);
       } catch (err) {
         console.error("Error fetching experience:", err);
@@ -228,64 +202,7 @@ export const useProjects = () => {
         const firestore = getDb();
         if (!firestore) {
           // Default projects data
-          setProjects([
-            {
-              id: "1",
-              title: "Fitme App",
-              subtitle: "Home Workout Platform",
-              description:
-                "Built a high-performance workout engine using Reanimated for fluid animations. Natively bridged audio players to sync sets and rest timers with video on demand.",
-              tech: [
-                "React Native",
-                "TypeScript",
-                "Reanimated",
-                "Kotlin",
-                "Swift",
-              ],
-              platform: "Android & iOS",
-              color: "from-emerald-500 to-teal-600",
-            },
-            {
-              id: "2",
-              title: "Poshan Tracker",
-              subtitle: "Anganwadi Health Tracking",
-              description:
-                "Developed a 3-day offline sync engine for automated data uploads and a secure Aadhaar verification module for health tracking.",
-              tech: ["React Native", "SQLite", "Firebase", "Android"],
-              platform: "Android",
-              color: "from-orange-500 to-red-600",
-            },
-            {
-              id: "3",
-              title: "Vakmangids",
-              subtitle: "Service Marketplace",
-              description:
-                "Scaled a cross-platform Subscription and Wallet system targeting the Belgium market with multi-language support.",
-              tech: ["React Native", "TypeScript", "Redux", "REST APIs"],
-              platform: "Android & iOS",
-              color: "from-blue-500 to-indigo-600",
-            },
-            {
-              id: "4",
-              title: "MauStats",
-              subtitle: "Survey Creation & Analytics",
-              description:
-                "Created a survey engine supporting n*n grids and complex inputs, capable of handling data for 1K+ companies offline with custom eCharts integration.",
-              tech: ["React Native", "eCharts", "SQLite", "TypeScript"],
-              platform: "Android & iOS",
-              color: "from-purple-500 to-pink-600",
-            },
-            {
-              id: "5",
-              title: "Cash Plus",
-              subtitle: "Beneficiary Tracking for UNICEF",
-              description:
-                "Built an offline beneficiary tracking system to manage payment statuses with secure data encryption.",
-              tech: ["React Native", "SQLite", "Firebase", "Kotlin"],
-              platform: "Android & iOS",
-              color: "from-cyan-500 to-blue-600",
-            },
-          ]);
+          setProjects([]);
           setLoading(false);
           return;
         }
@@ -297,6 +214,7 @@ export const useProjects = () => {
           id: doc.id,
           ...doc.data(),
         })) as Project[];
+        data.sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
         setProjects(data);
       } catch (err) {
         console.error("Error fetching projects:", err);
@@ -324,20 +242,7 @@ export const useSkills = () => {
         const firestore = getDb();
         if (!firestore) {
           // Default skills data
-          setSkills([
-            { id: "1", name: "React Native", category: "Mobile" },
-            { id: "2", name: "TypeScript", category: "Languages" },
-            { id: "3", name: "Android (Kotlin)", category: "Mobile" },
-            { id: "4", name: "iOS (Swift)", category: "Mobile" },
-            { id: "5", name: "SQLite", category: "Database" },
-            { id: "6", name: "Redux", category: "State" },
-            { id: "7", name: "Firebase", category: "Backend" },
-            { id: "8", name: "REST APIs", category: "Backend" },
-            { id: "9", name: "Reanimated", category: "Animation" },
-            { id: "10", name: "eCharts", category: "Visualization" },
-            { id: "11", name: "Native Modules", category: "Mobile" },
-            { id: "12", name: "Git", category: "Tools" },
-          ]);
+          setSkills([]);
           setLoading(false);
           return;
         }
@@ -380,19 +285,19 @@ export const useSocial = () => {
             {
               id: "1",
               platform: "LinkedIn",
-              url: "https://linkedin.com/in/sahilpahat101019",
+              url: "",
               icon: "linkedin",
             },
             {
               id: "2",
               platform: "GitHub",
-              url: "https://github.com/Pahatsahil",
+              url: "",
               icon: "github",
             },
             {
               id: "3",
               platform: "Email",
-              url: "mailto:sahilpahat12@gmail.com",
+              url: "",
               icon: "mail",
             },
           ]);
@@ -435,8 +340,8 @@ export const useContact = () => {
         if (!firestore) {
           // Default contact data
           setContact({
-            email: "sahilpahat12@gmail.com",
-            phone: "+919873371012",
+            email: "",
+            phone: "",
             showPhone: false,
             showEmail: false,
           });
@@ -495,22 +400,21 @@ export const useEducation = () => {
           return;
         }
 
-        const querySnapshot = await getDocs(
-          collection(firestore, "education"),
-        );
+        const querySnapshot = await getDocs(collection(firestore, "education"));
         const data = querySnapshot.docs
-          .map((doc) => ({ id: doc.id, ...doc.data() } as Education))
+          .map((doc) => ({ id: doc.id, ...doc.data() }) as Education)
           .sort((a, b) => (a.order || 0) - (b.order || 0));
         if (data.length) setEducation(data);
-        else setEducation([
-          {
-            id: "1",
-            degree: "Bachelor of Computer Applications (BCA)",
-            institution: "Indira Gandhi National Open University",
-            year: "2022 – 2025",
-            order: 1,
-          },
-        ]);
+        else
+          setEducation([
+            {
+              id: "1",
+              degree: "Bachelor of Computer Applications (BCA)",
+              institution: "Indira Gandhi National Open University",
+              year: "2022 – 2025",
+              order: 1,
+            },
+          ]);
       } catch (err) {
         console.error("Error fetching education:", err);
         setError("Failed to load education");
@@ -536,22 +440,7 @@ export const useCertifications = () => {
       try {
         const firestore = getDb();
         if (!firestore) {
-          setCertifications([
-            {
-              id: "1",
-              name: "React Native – The Practical Guide",
-              issuer: "Udemy",
-              year: "2023",
-              order: 1,
-            },
-            {
-              id: "2",
-              name: "TypeScript for Professionals",
-              issuer: "Udemy",
-              year: "2023",
-              order: 2,
-            },
-          ]);
+          setCertifications([]);
           setLoading(false);
           return;
         }
@@ -560,18 +449,10 @@ export const useCertifications = () => {
           collection(firestore, "certifications"),
         );
         const data = querySnapshot.docs
-          .map((doc) => ({ id: doc.id, ...doc.data() } as Certification))
+          .map((doc) => ({ id: doc.id, ...doc.data() }) as Certification)
           .sort((a, b) => (a.order || 0) - (b.order || 0));
         if (data.length) setCertifications(data);
-        else setCertifications([
-          {
-            id: "1",
-            name: "React Native – The Practical Guide",
-            issuer: "Udemy",
-            year: "2023",
-            order: 1,
-          },
-        ]);
+        else setCertifications([]);
       } catch (err) {
         console.error("Error fetching certifications:", err);
         setError("Failed to load certifications");
@@ -584,4 +465,78 @@ export const useCertifications = () => {
   }, []);
 
   return { certifications, loading, error };
+};
+
+export interface ResumeSettings {
+  theme: "modern" | "classic";
+  layout: "1col" | "2col";
+  showBio: boolean;
+  showSkills: boolean;
+  showEducation: boolean;
+  showCerts: boolean;
+  showProjects: boolean;
+  jobLimits: Record<string, number>;
+  projectVisibility: Record<string, boolean>;
+}
+
+export const DEFAULT_RESUME_SETTINGS: ResumeSettings = {
+  theme: "classic",
+  layout: "2col",
+  showBio: true,
+  showSkills: true,
+  showEducation: true,
+  showCerts: true,
+  showProjects: true,
+  jobLimits: {},
+  projectVisibility: {},
+};
+
+export const useResumeSettings = () => {
+  const [settings, setSettings] = useState<ResumeSettings>(
+    DEFAULT_RESUME_SETTINGS,
+  );
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let unsubscribe: () => void = () => {};
+
+    const fetchSettings = () => {
+      try {
+        const firestore = getDb();
+        if (!firestore) {
+          setLoading(false);
+          return;
+        }
+
+        const docRef = doc(firestore, COLLECTIONS.RESUME_SETTINGS, "main");
+        unsubscribe = onSnapshot(
+          docRef,
+          (snap) => {
+            if (snap.exists()) {
+              setSettings({
+                ...DEFAULT_RESUME_SETTINGS,
+                ...snap.data(),
+              } as ResumeSettings);
+            }
+            setLoading(false);
+          },
+          (err) => {
+            console.error("Error fetching resume settings:", err);
+            setError("Failed to load resume settings");
+            setLoading(false);
+          },
+        );
+      } catch (err) {
+        console.error("Error setting up snapshot:", err);
+        setError("Failed to monitor resume settings");
+        setLoading(false);
+      }
+    };
+
+    fetchSettings();
+    return () => unsubscribe();
+  }, []);
+
+  return { settings, loading, error };
 };

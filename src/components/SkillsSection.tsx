@@ -41,7 +41,7 @@ const SkillsSection = ({ skills }: SkillsSectionProps) => {
         </FadeIn>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {skills.map((skill, index) => {
+          {skills.filter(s => (s as any).visible !== false).map((skill, index) => {
             const IconComponent = getSkillIcon(skill.category);
             return (
               <FadeIn key={skill.id} delay={index * 0.05}>

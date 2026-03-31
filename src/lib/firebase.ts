@@ -1,9 +1,8 @@
-// Firebase configuration
-// Replace these values with your Firebase project configuration
-// To get your config: Go to Firebase Console → Project Settings → General → Your apps → Web app
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 import { getAnalytics } from "firebase/analytics";
-import.meta.env;
 
 const apiKey = import.meta.env.VITE_FIREBASE_API_KEY;
 const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
@@ -21,8 +20,26 @@ export const firebaseConfig = {
   measurementId,
 };
 
-// Initialize Firebase (uncomment after adding your config)
-// const app = initializeApp(firebaseConfig);
+let app: ReturnType<typeof initializeApp>;
+let auth: ReturnType<typeof getAuth>;
+let db: ReturnType<typeof getFirestore>;
+let storage: ReturnType<typeof getStorage>;
+let analytics: ReturnType<typeof getAnalytics> | undefined;
+
+try {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  storage = getStorage(app);
+  if (typeof window !== "undefined") {
+    analytics = getAnalytics(app);
+  }
+} catch (error) {
+  console.error("Firebase initialization error:", error);
+}
+
+export { app, auth, db, storage, analytics };
+
 // Firestore collection names
 export const COLLECTIONS = {
   PROFILE: "profile",
@@ -31,4 +48,5 @@ export const COLLECTIONS = {
   SKILLS: "skills",
   SOCIAL: "social",
   CONTACT: "contact",
+  RESUME_SETTINGS: "resumeSettings",
 };

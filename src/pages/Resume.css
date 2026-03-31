@@ -1,0 +1,406 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display&family=Lato:wght@300;400;700;900&family=Raleway:wght@300;400;500;600;700&display=swap');
+
+/* ─────────────────────────────────────────────
+   GLOBAL STRUCTURAL RULES
+───────────────────────────────────────────── */
+.resume-wrapper {
+  min-height: 100vh;
+  padding: 0 0 4rem 0;
+}
+
+/* ── Toolbar ── */
+.resume-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15,23,42,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(97,218,251,0.12);
+  padding: 0.85rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.toolbar-left { display: flex; align-items: center; gap: 1rem; }
+.toolbar-back { display: flex; align-items: center; gap: 0.5rem; color: #94a3b8; font-family: 'Inter', sans-serif; font-size: 0.8rem; text-decoration: none; transition: color 0.2s; }
+.toolbar-back:hover { color: #61dafb; }
+.toolbar-badge { font-family: 'Inter', sans-serif; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: #61dafb; background: rgba(97,218,251,0.08); border: 1px solid rgba(97,218,251,0.2); padding: 0.25rem 0.75rem; border-radius: 999px; }
+.toolbar-live { font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: #64748b; }
+.toolbar-live-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: pulse-green 2s infinite; }
+@keyframes pulse-green { 0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); } 50% { box-shadow: 0 0 0 6px rgba(34,197,94,0); } }
+.btn-download { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.5rem; background: linear-gradient(135deg, #61dafb, #818cf8); color: #0f172a; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.82rem; border: none; border-radius: 999px; cursor: pointer; transition: opacity 0.2s, transform 0.2s; letter-spacing: 0.02em; }
+.btn-download:hover { opacity: 0.9; transform: scale(1.03); }
+
+/* ── Container ── */
+.resume-page-wrap {
+  max-width: 860px;
+  margin: 2.5rem auto 0;
+  padding: 0 1rem;
+}
+.resume-card {
+  overflow: hidden;
+}
+
+/* ── Common Utilities ── */
+.resume-contact-row { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; }
+.contact-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; text-decoration: none; transition: color 0.2s; }
+.header-qr-stack { display: flex; flex-direction: column; align-items: flex-end; gap: 0.6rem; }
+.resume-body { display: flex; flex-direction: column; }
+.sidebar-section, .resume-section { margin-bottom: 2rem; }
+.sidebar-item-sub, .sidebar-item-year { margin-bottom: 0.1rem; }
+.exp-item, .project-item { margin-bottom: 1.5rem; }
+.exp-item:last-child, .project-item:last-child { margin-bottom: 0; }
+.project-header, .exp-header { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.25rem; align-items: baseline; }
+.project-link { text-decoration: none; display: inline-flex; align-items: center; gap: 0.2rem; }
+.exp-bullets { list-style: none; padding: 0; margin: 0; }
+
+/* ── Layout Rules (1col vs 2col) ── */
+.layout-2col .resume-body {
+  display: grid;
+  grid-template-columns: 1fr 2.2fr;
+  align-items: start;
+}
+.layout-2col.theme-classic .resume-body {
+  grid-template-columns: 1fr 2fr; /* Classic Deedy uses a slightly wider sidebar */
+  gap: 2rem;
+}
+.layout-1col .resume-body {
+  display: flex;
+  flex-direction: column;
+}
+.layout-1col .resume-sidebar { order: 2; }
+.layout-1col .resume-main { order: 1; }
+
+/* ── Responsive Mobile Utilities ── */
+@media screen and (max-width: 640px) {
+  .resume-body, .layout-2col .resume-body { display: flex !important; flex-direction: column; }
+  .resume-sidebar { order: 2; border-right: none !important; border-bottom: 1px solid #e2e8f0; }
+  .resume-main { order: 1; }
+  .header-grid { grid-template-columns: 1fr !important; }
+  .header-qr-stack { align-items: flex-start !important; }
+  .resume-header { padding: 2rem 1.5rem !important; }
+  .resume-toolbar { padding: 0.75rem 1rem; }
+}
+
+/* ── Print Overrides ── */
+@media print {
+  .resume-wrapper * { box-sizing: border-box !important; }
+  .resume-wrapper { padding: 0 !important; }
+  .resume-toolbar { display: none !important; }
+  .resume-page-wrap { max-width: 100%; margin: 0; padding: 0; }
+  .resume-card { box-shadow: none !important; border-radius: 0 !important; border: none !important; margin: 0; padding: 0; }
+  
+  @page { margin: 0; size: auto; }
+
+  /* Multi-page safe float-based reliable columns */
+  .layout-2col .resume-body {
+    display: block !important;
+  }
+  .layout-2col .resume-body::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  .layout-2col .resume-sidebar {
+    float: left !important;
+    width: 33% !important;
+  }
+  .layout-2col .resume-main {
+    float: right !important;
+    width: 67% !important;
+  }
+
+  .layout-1col .resume-sidebar { order: 2 !important; border-right: none !important; border-bottom: 1px solid #ccc !important; }
+
+  /* Prevent blocks from slicing exactly in half */
+  .exp-item, .project-item, .sidebar-section, .skill-group {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+
+/* ─────────────────────────────────────────────
+   THEME: MODERN DARK
+───────────────────────────────────────────── */
+.theme-modern.resume-wrapper {
+  background: linear-gradient(135deg, #0a0f1e 0%, #0f172a 50%, #1a0a2e 100%);
+  font-family: 'Inter', sans-serif;
+}
+.theme-modern .resume-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 0 0 1px rgba(97,218,251,0.15), 0 40px 80px rgba(0,0,0,0.5), 0 0 100px rgba(97,218,251,0.05);
+}
+.theme-modern .resume-header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+  padding: 2.8rem 3rem 2.2rem;
+  position: relative;
+}
+.theme-modern .resume-header::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(97,218,251,0.12) 0%, transparent 60%), radial-gradient(circle at 80% 30%, rgba(129,140,248,0.10) 0%, transparent 60%);
+}
+.theme-modern .header-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: start; }
+.theme-modern .resume-name { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 5vw, 3rem); color: #ffffff; line-height: 1.1; margin-bottom: 0.4rem; background: linear-gradient(135deg, #ffffff 30%, #61dafb 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.theme-modern .resume-title-badge { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #61dafb; background: rgba(97,218,251,0.1); border: 1px solid rgba(97,218,251,0.25); padding: 0.3rem 0.9rem; border-radius: 999px; margin-bottom: 1.2rem; }
+.theme-modern .contact-item { color: #94a3b8; }
+.theme-modern .contact-item:hover { color: #61dafb; }
+.theme-modern .header-availability { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: #22c55e; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); padding: 0.25rem 0.75rem; border-radius: 999px; }
+.theme-modern .header-availability-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
+
+/* Modern Body */
+.theme-modern .resume-sidebar { background: #f8fafc; padding: 2rem 1.6rem; }
+.theme-modern.layout-2col .resume-sidebar { border-right: 1px solid #e2e8f0; }
+.theme-modern .resume-main { padding: 2rem 2.2rem; background: #ffffff; }
+
+.theme-modern .resume-section-title { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid transparent; border-image: linear-gradient(90deg, #61dafb, #818cf8) 1; }
+.theme-modern .resume-section-title h2 { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #475569; margin: 0; }
+.theme-modern .resume-section-icon { color: #61dafb; display: flex; }
+
+.theme-modern .skill-group { margin-bottom: 1rem; }
+.theme-modern .skill-category { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #64748b; margin-bottom: 0.4rem; }
+.theme-modern .skill-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.theme-modern .resume-tag { font-size: 0.68rem; background: #e2e8f0; color: #334155; padding: 0.2rem 0.55rem; border-radius: 4px; font-weight: 500; }
+
+.theme-modern .sidebar-item-title { font-size: 0.78rem; font-weight: 600; color: #1e293b; line-height: 1.3; }
+.theme-modern .sidebar-item-sub { font-size: 0.7rem; color: #64748b; }
+.theme-modern .sidebar-item-year { font-size: 0.65rem; color: #94a3b8; }
+
+.theme-modern .resume-bio { font-size: 0.78rem; color: #475569; line-height: 1.75; margin-bottom: 1.5rem; padding: 0.8rem 1rem; background: linear-gradient(135deg, rgba(97,218,251,0.05), rgba(129,140,248,0.05)); border-left: 3px solid #61dafb; border-radius: 0 8px 8px 0; }
+
+.theme-modern .exp-title { font-size: 0.9rem; font-weight: 600; color: #1e293b; }
+.theme-modern .exp-period { font-size: 0.7rem; color: #94a3b8; background: #f1f5f9; padding: 0.15rem 0.6rem; border-radius: 4px; }
+.theme-modern .exp-company { font-size: 0.75rem; color: #6366f1; font-weight: 500; margin-bottom: 0.5rem; }
+.theme-modern .exp-bullets li { font-size: 0.77rem; line-height: 1.65; color: #475569; padding-left: 1rem; position: relative; margin-bottom: 0.2rem; }
+.theme-modern .exp-bullets li::before { content: '▸'; position: absolute; left: 0; color: #61dafb; font-size: 0.65rem; top: 0.12rem; }
+
+.theme-modern .project-name { font-size: 0.85rem; font-weight: 600; color: #1e293b; }
+.theme-modern .project-link { font-size: 0.68rem; color: #818cf8; }
+.theme-modern .project-tech { font-size: 0.7rem; color: #6366f1; margin-bottom: 0.3rem; }
+.theme-modern .project-desc { font-size: 0.75rem; color: #475569; line-height: 1.6; }
+
+@media print {
+  .theme-modern .resume-header { background: #1e293b !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .theme-modern .resume-sidebar { background: #f8fafc !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
+
+
+/* ─────────────────────────────────────────────
+   THEME: CLASSIC DEEDY MINIMALIST
+───────────────────────────────────────────── */
+.theme-classic.resume-wrapper {
+  background: #f1f5f9; /* Soft outer bg */
+  font-family: 'Lato', sans-serif;
+}
+.theme-classic .resume-card {
+  background: #ffffff;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Classic Header */
+.theme-classic .resume-header {
+  padding: 3.5rem 2.5rem 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid #d1d5db; /* Separator line from the image */
+  margin-bottom: 1.5rem;
+}
+.theme-classic .header-grid {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.theme-classic .resume-name {
+  font-family: 'Raleway', sans-serif;
+  font-size: 3.8rem;
+  font-weight: 300; /* Extremely thin like Deedy */
+  color: #333333;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1;
+}
+.theme-classic .name-first {
+  font-weight: 300;
+}
+.theme-classic .name-last {
+  font-weight: 700;
+}
+.theme-classic .resume-title-badge {
+  display: none; /* Deedy has no colored badge */
+}
+.theme-classic .header-qr-stack {
+  display: none; /* Hide availability dot for print classic */
+}
+.theme-classic .resume-contact-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.theme-classic .contact-item {
+  color: #555555;
+  font-size: 0.85rem;
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+}
+.theme-classic .contact-item svg { display: none; } /* Deedy hides icons usually! Just uses the text */
+/* Deedy uses pipe separators for contact info */
+.theme-classic .contact-item:not(:last-child)::after {
+  content: " | ";
+  margin-left: 0.5rem;
+  color: #999;
+}
+
+/* Classic Body */
+.theme-classic .resume-sidebar {
+  padding: 0 1rem 2rem 2.5rem;
+}
+.theme-classic .resume-main {
+  padding: 0 2.5rem 2rem 1rem;
+}
+
+/* Classic Titles */
+.theme-classic .resume-section-title {
+  border-bottom: none;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0;
+}
+.theme-classic .resume-section-icon { display: none; } /* No icons! */
+.theme-classic .resume-section-title h2 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  color: #888888; /* Light gray section headers */
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+/* Sidebar Details */
+.theme-classic .resume-sidebar { display: flex; flex-direction: column; }
+.theme-classic .sidebar-section-education { order: 1; }
+.theme-classic .sidebar-section-certs { order: 2; }
+.theme-classic .sidebar-section-skills { order: 3; }
+
+.theme-classic .sidebar-section { margin-bottom: 1.5rem; }
+.theme-classic .skill-category {
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #333333;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
+.theme-classic .skill-tags { display: block; }
+.theme-classic .resume-tag {
+  background: transparent;
+  color: #555555;
+  padding: 0;
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+.theme-classic .resume-tag::after { content: " • "; color: #ccc; }
+.theme-classic .resume-tag:last-child::after { content: ""; }
+
+.theme-classic .sidebar-item { margin-bottom: 0.8rem; }
+.theme-classic .sidebar-item-title {
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #333333;
+  text-transform: uppercase;
+}
+.theme-classic .sidebar-item-sub {
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: #555;
+}
+.theme-classic .sidebar-item-year {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* Main Details */
+.theme-classic .resume-bio {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  border-left: none;
+  background: transparent;
+  padding: 0;
+}
+
+.theme-classic .exp-header {
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 0.2rem;
+}
+.theme-classic .exp-title {
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #333333;
+  text-transform: uppercase;
+}
+.theme-classic .exp-company {
+  font-family: 'Lato', sans-serif;
+  font-weight: 400; /* In Deedy, company is often normal weight, pipe separated with location/title */
+  font-size: 1rem;
+  color: #555555;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
+.theme-classic .exp-period {
+  background: transparent;
+  padding: 0;
+  font-size: 0.85rem;
+  color: #777;
+  font-style: italic;
+}
+.theme-classic .exp-bullets li {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #333;
+  padding-left: 1.2rem;
+  position: relative;
+  margin-bottom: 0.2rem;
+}
+.theme-classic .exp-bullets li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #333; /* strict black dot */
+  font-size: 1rem;
+  top: 0;
+}
+
+.theme-classic .project-header { flex-wrap: wrap; align-items: baseline; }
+.theme-classic .project-name {
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #333333;
+  text-transform: uppercase;
+  margin-right: 0.5rem;
+}
+.theme-classic .project-link { font-size: 0.8rem; color: #555; font-style: italic; }
+.theme-classic .project-link svg { display: none; }
+.theme-classic .project-tech { font-size: 0.85rem; color: #555; text-transform: uppercase; margin-bottom: 0.2rem; }
+.theme-classic .project-desc { font-size: 0.9rem; color: #333; }
+
+/* In classic theme, remove borders in 2-col between columns completely */
+.theme-classic.layout-2col .resume-sidebar { border-right: none; }
+
+/* Handle single-column clean view without borders */
+.theme-classic.layout-1col .resume-sidebar { padding: 0 2.5rem 0; border: none !important;}
+.theme-classic.layout-1col .resume-main { padding: 0 2.5rem 2.5rem; }
+
+@media print {
+  .theme-classic .resume-header { background: white !important; }
+  .theme-classic .resume-sidebar { background: white !important; }
+}
