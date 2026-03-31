@@ -6,7 +6,7 @@ import sourceIdentifierPlugin from "vite-plugin-source-identifier";
 const isProd = process.env.BUILD_MODE === "prod";
 // For GitHub Pages deployment, change 'your-username' and 'your-repo-name' to your actual GitHub details
 // Example: base: '/your-repo-name/'
-// const baseUrl = process.env.GITHUB_PAGES ? "/sahil-portfolio/" : "/";
+const baseUrl = process.env.GITHUB_PAGES ? "/portfolio/" : "/";
 
 export default defineConfig({
   plugins: [
@@ -17,8 +17,7 @@ export default defineConfig({
       includeProps: true,
     }),
   ],
-  // base: baseUrl,
-  base: "/sahil-portfolio/",
+  base: baseUrl,
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
