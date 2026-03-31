@@ -11,14 +11,24 @@ const senderId = import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID;
 const appId = import.meta.env.VITE_FIREBASE_APP_ID;
 const measurementId = import.meta.env.VITE_MEASUREMENT_ID;
 
-export const firebaseConfig = {
-  apiKey,
-  authDomain: projectId + ".firebaseapp.com",
-  projectId,
-  storageBucket: projectId + ".firebasestorage.app",
-  messagingSenderId: senderId,
-  appId,
-  measurementId,
+// export const firebaseConfig = {
+//   apiKey,
+//   authDomain: projectId + ".firebaseapp.com",
+//   projectId,
+//   storageBucket: projectId + ".firebasestorage.app",
+//   messagingSenderId: senderId,
+//   appId,
+//   measurementId,
+// };
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAMFc1j5Ewblnw8OGrMb1HJzl9nPEP9YCk",
+  authDomain: "portfolio-49755.firebaseapp.com",
+  projectId: "portfolio-49755",
+  storageBucket: "portfolio-49755.firebasestorage.app",
+  messagingSenderId: "1098558436808",
+  appId: "1:1098558436808:web:c51c26d8b14e9ab45a3cfd",
+  measurementId: "G-E1E2ES8QGY"
 };
 
 let app: ReturnType<typeof initializeApp>;
