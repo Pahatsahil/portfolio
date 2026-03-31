@@ -3,13 +3,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getAnalytics } from "firebase/analytics";
-import.meta.env;
+// import.meta.env;
 
-const apiKey = import.meta.env.VITE_FIREBASE_API_KEY;
-const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
-const senderId = import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID;
-const appId = import.meta.env.VITE_FIREBASE_APP_ID;
-const measurementId = import.meta.env.VITE_MEASUREMENT_ID;
+// const apiKey = import.meta.env.VITE_FIREBASE_API_KEY;
+// const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
+// const senderId = import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID;
+// const appId = import.meta.env.VITE_FIREBASE_APP_ID;
+// const measurementId = import.meta.env.VITE_MEASUREMENT_ID;
 
 // export const firebaseConfig = {
 //   apiKey,
